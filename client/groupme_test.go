@@ -1,6 +1,8 @@
 package groupme_test
 
 import (
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
 	"github.com/theboarderline/groupme-utilities/client"
 	"os"
 	"time"
@@ -39,7 +41,7 @@ var _ = Describe("Groupme", func() {
 	})
 
 	It("can upload an image to the image service", func() {
-		imageReader, err := os.Open("testfiles/test_image.png")
+		imageReader, err := os.Open("client/testfiles/test_image.png")
 		Expect(err).NotTo(HaveOccurred())
 		defer imageReader.Close()
 
@@ -61,7 +63,7 @@ var _ = Describe("Groupme", func() {
 	})
 
 	It("can get the Memes from the groupme api and return the top meme", func() {
-		meme, err := validClient.GetTopMemeBetweenDates(testDay)
+		meme, err := validClient.GetTopMemeBetweenDates(testDay, testDay.AddDate(0, 0, 1))
 
 		expectedMessageID := "168675296063513419"
 		Expect(err).NotTo(HaveOccurred())
@@ -71,7 +73,7 @@ var _ = Describe("Groupme", func() {
 	})
 
 	It("can get the Memes from the groupme api and return the top meme", func() {
-		meme, err := validClient.GetTopMemeBetweenDates(testDay)
+		meme, err := validClient.GetTopMemeBetweenDates(testDay, testDay.AddDate(0, 0, 1))
 
 		expectedMessageID := "168675296063513419"
 		Expect(err).NotTo(HaveOccurred())
@@ -81,7 +83,7 @@ var _ = Describe("Groupme", func() {
 	})
 
 	It("can get safely return no memes if none were sent that day", func() {
-		meme, err := validClient.GetTopMemeBetweenDates(dayWithNoMemes)
+		meme, err := validClient.GetTopMemeBetweenDates(dayWithNoMemes, dayWithNoMemes.AddDate(0, 0, 1))
 
 		Expect(err).NotTo(HaveOccurred())
 		Expect(meme).NotTo(BeNil())

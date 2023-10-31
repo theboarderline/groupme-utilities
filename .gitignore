@@ -46,3 +46,5 @@ envs/gcp.sh
 **/Icon
 **/.dropbox*
 
+
+**/.env

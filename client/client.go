@@ -142,7 +142,7 @@ func (c Client) UploadPicture(file io.Reader) (string, error) {
 
 	response, err := c.httpClient.R().
 		SetHeader(AccessTokenHeaderKey, c.AccessToken).
-		SetHeader("Content-Type", "image/jpeg").
+		SetHeader(ContentTypeHeaderKey, ImageJPEGContentType).
 		SetBody(file).
 		Post(ImageServiceURL)
 

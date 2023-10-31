@@ -3,7 +3,7 @@ package groupme_test
 import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	"github.com/theboarderline/groupme-utilities/client"
+	groupme "github.com/theboarderline/groupme-utilities/client"
 	"time"
 )
 
@@ -16,10 +16,6 @@ var _ = Describe("Filter", func() {
 	BeforeEach(func() {
 		todayBegin = time.Date(2023, 6, 14, 0, 0, 0, 0, time.UTC)
 		todayEnd = time.Date(todayBegin.Year(), todayBegin.Month(), todayBegin.Day(), 23, 59, 59, 0, time.UTC)
-	})
-
-	It("can determine if a message was sent in a given time window", func() {
-
 	})
 
 	It("can filter messages and return only the Memes on a given day", func() {
@@ -43,7 +39,7 @@ var _ = Describe("Filter", func() {
 			},
 		}
 
-		filteredMessages := groupme.FilterMemesByTimespan(rawMessages, &todayBegin, &todayEnd)
+		filteredMessages := groupme.FilterMemesByTimespan(rawMessages, todayBegin, todayEnd)
 
 		Expect(len(filteredMessages)).To(BeEquivalentTo(2))
 	})
@@ -66,7 +62,7 @@ var _ = Describe("Filter", func() {
 		message := groupme.Message{
 			CreatedAt: todayBegin.Unix(),
 		}
-		sentDuringTimespan := groupme.MessageSentDuringTimespan(message, &todayBegin, &todayEnd)
+		sentDuringTimespan := message.SentDuringTimespan(todayBegin, todayEnd)
 		Expect(sentDuringTimespan).To(BeTrue())
 	})
 
@@ -74,13 +70,13 @@ var _ = Describe("Filter", func() {
 		message := groupme.Message{
 			CreatedAt: todayBegin.AddDate(0, 0, 1).Unix(),
 		}
-		sentDuringTimespan := groupme.MessageSentDuringTimespan(message, &todayBegin, &todayEnd)
+		sentDuringTimespan := message.SentDuringTimespan(todayBegin, todayEnd)
 		Expect(sentDuringTimespan).To(BeFalse())
 
 		message = groupme.Message{
 			CreatedAt: todayBegin.AddDate(0, 0, 1).Unix(),
 		}
-		sentDuringTimespan = groupme.MessageSentDuringTimespan(message, &todayBegin, &todayEnd)
+		sentDuringTimespan = message.SentDuringTimespan(todayBegin, todayEnd)
 		Expect(sentDuringTimespan).To(BeFalse())
 	})
 

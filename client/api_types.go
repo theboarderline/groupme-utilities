@@ -21,7 +21,7 @@ type ImageServiceResponse struct {
 	Payload ImageServicePayload `json:"payload"`
 }
 type ImageServicePayload struct {
-	URL        string `json:"BotMessagePostURL"`
+	URL        string `json:"url"`
 	PictureURL string `json:"picture_url"`
 }
 
