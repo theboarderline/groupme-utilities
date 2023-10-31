@@ -12,12 +12,17 @@ func NewMockClient() *MockClient {
 }
 
 func (c MockClient) GetTopMemeBetweenDates(start, end *time.Time) (message Message, err error) {
+
+	if start == nil || end == nil {
+		return Message{}, nil
+	}
+
 	return Message{
 		ID:          "1",
 		SenderID:    "1",
 		FavoritedBy: []string{"1", "2", "3", "4"},
 		Attachments: []Attachment{{Type: "image"}},
-		CreatedAt:   time.Date(2023, 6, 25, 12, 0, 0, 0, time.UTC).Unix(),
+		CreatedAt:   time.Date(2023, 6, 26, 12, 0, 0, 0, time.UTC).Unix(),
 	}, nil
 }
 
