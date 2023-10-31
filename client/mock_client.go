@@ -17,6 +17,7 @@ func (c MockClient) GetTopMemeBetweenDates(start, end *time.Time) (message Messa
 		SenderID:    "1",
 		FavoritedBy: []string{"1", "2", "3", "4"},
 		Attachments: []Attachment{{Type: "image"}},
+		CreatedAt:   time.Date(2023, 6, 25, 12, 0, 0, 0, time.UTC).Unix(),
 	}, nil
 }
 
