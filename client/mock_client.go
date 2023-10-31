@@ -11,7 +11,7 @@ func NewMockClient() *MockClient {
 	return &MockClient{}
 }
 
-func (c MockClient) GetTopMemeBetweenDates(startDate, endDate time.Time) (message Message, err error) {
+func (c MockClient) GetTopMemeBetweenDates(start, end *time.Time) (message Message, err error) {
 	return Message{
 		ID:          "1",
 		SenderID:    "1",
@@ -20,7 +20,7 @@ func (c MockClient) GetTopMemeBetweenDates(startDate, endDate time.Time) (messag
 	}, nil
 }
 
-func (c MockClient) GetMemesInWindow(startDate, endDate *time.Time) (messages []Message, err error) {
+func (c MockClient) GetMemesInWindow(start, end *time.Time) (messages []Message, err error) {
 
 	return messages, nil
 }
@@ -31,4 +31,11 @@ func (c MockClient) SendMessage(text, pictureURL string) error {
 
 func (c MockClient) ProcessImage(file io.Reader) (string, error) {
 	return "https://fake-image.com", nil
+}
+
+func (c MockClient) GetReportForDateRange(start, end *time.Time) (report *Report, err error) {
+	return &Report{
+		StartDate: start,
+		EndDate:   end,
+	}, nil
 }

@@ -33,8 +33,9 @@ func NewBotClient(botID, groupID, accessToken string) *BotClient {
 	}
 }
 
-func (c BotClient) GetTopMemeBetweenDates(startDate, endDate time.Time) (message Message, err error) {
-	messages, err := c.GetMemesInWindow(&startDate, &endDate)
+func (c BotClient) GetTopMemeBetweenDates(startDate, endDate *time.Time) (message Message, err error) {
+
+	messages, err := c.GetMemesInWindow(startDate, endDate)
 	if err != nil {
 		log.Err(err).Msg("could not get Memes from day")
 		return Message{}, err
@@ -172,4 +173,14 @@ func (c BotClient) ProcessImage(file io.Reader) (string, error) {
 	}
 
 	return imageResponse.Payload.URL, nil
+}
+
+func (c BotClient) GetReportForDateRange(start, end *time.Time) (*Report, error) {
+
+	memes, err := c.GetMemesInWindow(start, end)
+	if err != nil {
+		return nil, err
+	}
+
+	return NewReport(memes), nil
 }

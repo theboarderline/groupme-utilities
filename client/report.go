@@ -2,8 +2,6 @@ package groupme
 
 import (
 	"fmt"
-	"github.com/rs/zerolog/log"
-	"github.com/theboarderline/groupme-utilities/timeparser"
 	"time"
 )
 
@@ -61,19 +59,4 @@ func (r *Report) String() string {
 	line2 := fmt.Sprintf("Number of memes: %d\n", r.MemesHeap.Len())
 	line3 := fmt.Sprintf("Number of favorites: %d\n", r.MemesHeap.NumFavorites())
 	return line1 + line2 + line3
-}
-
-func (c BotClient) GetReportForDateRange(message string) (string, error) {
-	start, end, err := timeparser.GetStartAndEndDateFromMessage(message)
-	if err != nil {
-		return "", err
-	}
-
-	memes, err := c.GetMemesInWindow(start, end)
-	if err != nil {
-		log.Err(err).Msg("unable to get memes in window")
-		return "unable to get memes in window", err
-	}
-
-	return NewReport(memes).String(), nil
 }
