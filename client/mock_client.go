@@ -40,8 +40,22 @@ func (c MockClient) ProcessImage(file io.Reader) (string, error) {
 }
 
 func (c MockClient) GetReportForDateRange(start, end *time.Time) (report *Report, err error) {
-	return &Report{
-		StartDate: start,
-		EndDate:   end,
-	}, nil
+	messages := []Message{
+		{
+			ID:          "1",
+			SenderID:    "1",
+			FavoritedBy: []string{"1", "2", "3", "4"},
+			Attachments: []Attachment{{Type: "image"}},
+			CreatedAt:   time.Date(2023, 6, 26, 12, 0, 0, 0, time.UTC).Unix(),
+		},
+		{
+			ID:          "2",
+			SenderID:    "1",
+			FavoritedBy: []string{"1", "2", "3"},
+			Attachments: []Attachment{{Type: "image"}},
+			CreatedAt:   time.Date(2023, 6, 26, 12, 0, 0, 0, time.UTC).Unix(),
+		},
+	}
+
+	return NewReport(messages), nil
 }
