@@ -64,8 +64,10 @@ func (r *Report) String() string {
 }
 
 func GetReportForDateRange(client *Client, message string) (string, error) {
-	start, end := timeparser.GetStartAndEndDateFromMessage(message)
-	log.Debug().Msgf("start: %s, end: %s", start, end)
+	start, end, err := timeparser.GetStartAndEndDateFromMessage(message)
+	if err != nil {
+		return "", err
+	}
 
 	memes, err := client.GetMemesInWindow(start, end)
 	if err != nil {

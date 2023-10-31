@@ -1,33 +1,36 @@
 package timeparser
 
 import (
-	"fmt"
+	"errors"
+	"github.com/araddon/dateparse"
 	"github.com/rs/zerolog/log"
 	"strings"
 	"time"
 )
 
-func formatTime(s string) *time.Time {
-	if s == "" {
-		return nil
-	}
-
-	date, err := time.Parse("01/02", s)
+func FormatReportRange(s, e string) (*time.Time, *time.Time, error) {
+	start, err := dateparse.ParseAny(s)
 	if err != nil {
-		log.Debug().Msgf("Error parsing start date: %s", err)
+		return nil, nil, err
 	}
 
-	currentYear := fmt.Sprint(time.Now().Year())
-	date, err = time.Parse("01/02/2006", fmt.Sprintf("%s/%s", s, currentYear))
+	end, err := dateparse.ParseAny(e)
+	if err != nil {
+		return nil, nil, err
+	}
 
-	return &date
-}
+	if start.Year() == 0 {
+		now := time.Now()
+		start = time.Date(now.Year(), start.Month(), start.Day(), 0, 0, 0, 0, time.UTC)
+	}
 
-func FormatReportRange(s, e string) (start *time.Time, end *time.Time) {
-	start = formatTime(s)
-	end = formatTime(e)
+	if end.Year() == 0 {
+		now := time.Now()
+		end = time.Date(now.Year(), end.Month(), end.Day(), 23, 59, 59, 0, time.UTC)
+	}
 
-	return start, end
+	log.Debug().Msgf("start: %s, end: %s", start, end)
+	return &start, &end, nil
 }
 
 func GetStartAndEndDateString(date string) (start string, end string) {
@@ -42,11 +45,12 @@ func GetStartAndEndDateString(date string) (start string, end string) {
 	return strings.TrimSpace(dateList[0]), strings.TrimSpace(dateList[1])
 }
 
-func GetStartAndEndDateFromMessage(message string) (start *time.Time, end *time.Time) {
+func GetStartAndEndDateFromMessage(message string) (*time.Time, *time.Time, error) {
+
 	splitMessage := strings.Split(message, " ")
 	if len(splitMessage) == 2 {
-		return nil, nil
+		return nil, nil, errors.New("invalid date range")
 	}
-	startString, endString := GetStartAndEndDateString(message)
-	return FormatReportRange(startString, endString)
+
+	return FormatReportRange(GetStartAndEndDateString(message))
 }

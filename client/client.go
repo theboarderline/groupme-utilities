@@ -8,6 +8,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"io"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -109,6 +110,11 @@ func (c Client) GetMemesInWindow(startDate, endDate *time.Time) (messages []Mess
 
 func (c Client) SendMessage(text, pictureURL string) error {
 
+	if os.Getenv("SEND_MESSAGE") != "true" {
+		log.Info().Msg("skipping sending message to groupme api")
+		return nil
+	}
+
 	messageRequest := Request{
 		BotID:      c.BotID,
 		Text:       text,
@@ -138,7 +144,7 @@ func (c Client) SendMessage(text, pictureURL string) error {
 	return nil
 }
 
-func (c Client) UploadPicture(file io.Reader) (string, error) {
+func (c Client) ProcessImage(file io.Reader) (string, error) {
 
 	response, err := c.httpClient.R().
 		SetHeader(AccessTokenHeaderKey, c.AccessToken).

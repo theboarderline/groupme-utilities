@@ -45,7 +45,7 @@ var _ = Describe("Groupme", func() {
 		Expect(err).NotTo(HaveOccurred())
 		defer imageReader.Close()
 
-		res, err := validClient.UploadPicture(imageReader)
+		res, err := validClient.ProcessImage(imageReader)
 		Expect(err).NotTo(HaveOccurred())
 		Expect(res).NotTo(BeNil())
 		Expect(res).NotTo(BeEmpty())

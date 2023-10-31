@@ -16,8 +16,8 @@ var _ = Describe("Timeparser", func() {
 	startDay := 18
 	endDay := 20
 
-	startDate := time.Date(testYear, time.Month(testMonth), startDay, 0, 0, 0, 0, time.UTC)
-	endDate := time.Date(testYear, time.Month(testMonth), endDay, 0, 0, 0, 0, time.UTC)
+	expectedStartDate := time.Date(testYear, time.Month(testMonth), startDay, 0, 0, 0, 0, time.UTC)
+	expectedEndDate := time.Date(testYear, time.Month(testMonth), endDay, 0, 0, 0, 0, time.UTC)
 
 	startString := "12/18"
 	endString := "12/20"
@@ -30,19 +30,33 @@ var _ = Describe("Timeparser", func() {
 	})
 
 	It("can parse a report request with a date", func() {
-		actualStart, actualEnd := timeparser.FormatReportRange(startString, endString)
+		actualStart, actualEnd, err := timeparser.FormatReportRange(startString, endString)
+		Expect(err).NotTo(HaveOccurred())
+
 		Expect(actualStart).NotTo(BeNil())
-		Expect(*actualStart).To(BeEquivalentTo(startDate))
+		Expect(actualStart.Day()).To(Equal(expectedStartDate.Day()))
+		Expect(actualStart.Month()).To(Equal(expectedStartDate.Month()))
+		Expect(actualStart.Year()).To(Equal(expectedStartDate.Year()))
+
 		Expect(actualEnd).NotTo(BeNil())
-		Expect(*actualEnd).To(BeEquivalentTo(endDate))
+		Expect(actualEnd.Day()).To(Equal(expectedEndDate.Day()))
+		Expect(actualEnd.Month()).To(Equal(expectedEndDate.Month()))
+		Expect(actualEnd.Year()).To(Equal(expectedEndDate.Year()))
 	})
 
 	It("can parse a report request with a date and year", func() {
-		actualStart, actualEnd := timeparser.GetStartAndEndDateFromMessage(input)
+		actualStart, actualEnd, err := timeparser.GetStartAndEndDateFromMessage(input)
+		Expect(err).NotTo(HaveOccurred())
+
 		Expect(actualStart).NotTo(BeNil())
-		Expect(*actualStart).To(BeEquivalentTo(startDate))
+		Expect(actualStart.Day()).To(Equal(expectedStartDate.Day()))
+		Expect(actualStart.Month()).To(Equal(expectedStartDate.Month()))
+		Expect(actualStart.Year()).To(Equal(expectedStartDate.Year()))
+
 		Expect(actualEnd).NotTo(BeNil())
-		Expect(*actualEnd).To(BeEquivalentTo(endDate))
+		Expect(actualEnd.Day()).To(Equal(expectedEndDate.Day()))
+		Expect(actualEnd.Month()).To(Equal(expectedEndDate.Month()))
+		Expect(actualEnd.Year()).To(Equal(expectedEndDate.Year()))
 	})
 
 })
