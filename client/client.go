@@ -111,7 +111,7 @@ func (c BotClient) GetMemesInWindow(startDate, endDate *time.Time) (messages []M
 
 func (c BotClient) SendMessage(text, pictureURL string) error {
 
-	if os.Getenv("SEND_MESSAGE") != "true" {
+	if os.Getenv("SEND_MESSAGES") != "true" {
 		log.Info().Msg("skipping sending message to groupme api")
 		return nil
 	}
