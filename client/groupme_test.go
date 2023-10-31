@@ -11,21 +11,21 @@ import (
 var _ = Describe("Groupme", func() {
 
 	var (
-		validClient    *groupme.Client
+		validClient    *groupme.BotClient
 		testDay        time.Time
 		testDayEnd     time.Time
 		dayWithNoMemes time.Time
 	)
 
 	BeforeEach(func() {
-		validClient = groupme.NewClient(os.Getenv("BOT_ID"), os.Getenv("GROUP_ID"), os.Getenv("GROUPME_ACCESS_TOKEN"))
+		validClient = groupme.NewBotClient(os.Getenv("BOT_ID"), os.Getenv("GROUP_ID"), os.Getenv("GROUPME_ACCESS_TOKEN"))
 		testDay = time.Date(2023, 6, 14, 0, 0, 0, 0, time.UTC)
 		testDayEnd = time.Date(testDay.Year(), testDay.Month(), testDay.Day(), 23, 59, 59, 0, time.UTC)
 		dayWithNoMemes = time.Date(2023, 6, 25, 0, 0, 0, 0, time.UTC)
 	})
 
 	It("can throw an error if given incorrect credentials", func() {
-		invalidClient := groupme.NewClient("fake-bot-id", "fake-groupid", "fake-accesstoken")
+		invalidClient := groupme.NewBotClient("fake-bot-id", "fake-groupid", "fake-accesstoken")
 
 		messages, err := invalidClient.GetMemesInWindow(&testDay, &testDayEnd)
 		Expect(err).To(HaveOccurred())

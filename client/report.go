@@ -63,7 +63,7 @@ func (r *Report) String() string {
 	return line1 + line2 + line3
 }
 
-func GetReportForDateRange(client *Client, message string) (string, error) {
+func GetReportForDateRange(client *BotClient, message string) (string, error) {
 	start, end, err := timeparser.GetStartAndEndDateFromMessage(message)
 	if err != nil {
 		return "", err

@@ -16,7 +16,7 @@ const (
 	RequestLimit = "100"
 )
 
-type Client struct {
+type BotClient struct {
 	BotID       string
 	GroupID     string
 	AccessToken string
@@ -24,8 +24,8 @@ type Client struct {
 	httpClient  *resty.Client
 }
 
-func NewClient(botID, groupID, accessToken string) *Client {
-	return &Client{
+func NewBotClient(botID, groupID, accessToken string) *BotClient {
+	return &BotClient{
 		BotID:       botID,
 		GroupID:     groupID,
 		AccessToken: accessToken,
@@ -33,7 +33,7 @@ func NewClient(botID, groupID, accessToken string) *Client {
 	}
 }
 
-func (c Client) GetTopMemeBetweenDates(startDate, endDate time.Time) (message Message, err error) {
+func (c BotClient) GetTopMemeBetweenDates(startDate, endDate time.Time) (message Message, err error) {
 	messages, err := c.GetMemesInWindow(&startDate, &endDate)
 	if err != nil {
 		log.Err(err).Msg("could not get Memes from day")
@@ -53,7 +53,7 @@ func (c Client) GetTopMemeBetweenDates(startDate, endDate time.Time) (message Me
 	return memes[0], nil
 }
 
-func (c Client) GetMemesInWindow(startDate, endDate *time.Time) (messages []Message, err error) {
+func (c BotClient) GetMemesInWindow(startDate, endDate *time.Time) (messages []Message, err error) {
 
 	if startDate == nil || endDate == nil {
 		start := time.Now().AddDate(0, -1, 0)
@@ -108,7 +108,7 @@ func (c Client) GetMemesInWindow(startDate, endDate *time.Time) (messages []Mess
 	return messages, nil
 }
 
-func (c Client) SendMessage(text, pictureURL string) error {
+func (c BotClient) SendMessage(text, pictureURL string) error {
 
 	if os.Getenv("SEND_MESSAGE") != "true" {
 		log.Info().Msg("skipping sending message to groupme api")
@@ -144,7 +144,7 @@ func (c Client) SendMessage(text, pictureURL string) error {
 	return nil
 }
 
-func (c Client) ProcessImage(file io.Reader) (string, error) {
+func (c BotClient) ProcessImage(file io.Reader) (string, error) {
 
 	response, err := c.httpClient.R().
 		SetHeader(AccessTokenHeaderKey, c.AccessToken).
