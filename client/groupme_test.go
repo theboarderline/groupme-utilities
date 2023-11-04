@@ -63,7 +63,8 @@ var _ = Describe("Groupme", func() {
 	})
 
 	It("can get the Memes from the groupme api and return the top meme", func() {
-		meme, err := validClient.GetTopMemeBetweenDates(testDay, testDay.AddDate(0, 0, 1))
+		testDayEnd = testDay.AddDate(0, 0, 1)
+		meme, err := validClient.GetTopMemeBetweenDates(&testDay, &testDayEnd)
 
 		expectedMessageID := "168675296063513419"
 		Expect(err).NotTo(HaveOccurred())
@@ -73,7 +74,8 @@ var _ = Describe("Groupme", func() {
 	})
 
 	It("can get the Memes from the groupme api and return the top meme", func() {
-		meme, err := validClient.GetTopMemeBetweenDates(testDay, testDay.AddDate(0, 0, 1))
+		testDayEnd = testDay.AddDate(0, 0, 1)
+		meme, err := validClient.GetTopMemeBetweenDates(&testDay, &testDayEnd)
 
 		expectedMessageID := "168675296063513419"
 		Expect(err).NotTo(HaveOccurred())
@@ -83,7 +85,8 @@ var _ = Describe("Groupme", func() {
 	})
 
 	It("can get safely return no memes if none were sent that day", func() {
-		meme, err := validClient.GetTopMemeBetweenDates(dayWithNoMemes, dayWithNoMemes.AddDate(0, 0, 1))
+		dayWithNoMemes = dayWithNoMemes.AddDate(0, 0, 1)
+		meme, err := validClient.GetTopMemeBetweenDates(&dayWithNoMemes, &dayWithNoMemes)
 
 		Expect(err).NotTo(HaveOccurred())
 		Expect(meme).NotTo(BeNil())
