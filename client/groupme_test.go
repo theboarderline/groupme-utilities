@@ -69,6 +69,8 @@ var _ = Describe("Groupme", func() {
 		Expect(err).NotTo(HaveOccurred())
 		Expect(meme).NotTo(BeNil())
 		Expect(meme.ID).To(BeEquivalentTo(expectedMessageID))
+		Expect(meme.Attachments).To(HaveLen(1))
+		Expect(meme.Attachments[0].URL).NotTo(BeEmpty())
 		ExpectAllMessagesToBeOnDay([]groupme.Message{meme}, testDay)
 	})
 

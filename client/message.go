@@ -16,7 +16,7 @@ type Message struct {
 
 type Attachment struct {
 	Type string `json:"type"`
-	URL  string `json:"BotMessagePostURL"`
+	URL  string `json:"url"`
 }
 
 func (m Message) SentDuringTimespan(begin, end time.Time) bool {
