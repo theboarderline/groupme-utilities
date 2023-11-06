@@ -18,6 +18,16 @@ var (
 				Type: "image",
 				URL:  fakeImage,
 			}},
+			CreatedAt: time.Date(2022, 6, 26, 12, 0, 0, 0, time.UTC).Unix(),
+		},
+		{
+			ID:          "1",
+			SenderID:    "1",
+			FavoritedBy: []string{"1", "2", "3", "4"},
+			Attachments: []Attachment{{
+				Type: "image",
+				URL:  fakeImage,
+			}},
 			CreatedAt: time.Date(2023, 6, 26, 12, 0, 0, 0, time.UTC).Unix(),
 		},
 		{
