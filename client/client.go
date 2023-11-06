@@ -101,8 +101,10 @@ func (c BotClient) GetMemesInWindow(startDate, endDate *time.Time) (messages []M
 			beforeID = res.Response.Messages[len(res.Response.Messages)-1].ID
 
 			messages = append(messages, FilterMemesByTimespan(res.Response.Messages, *startDate, *endDate)...)
-		}
 
+		} else if response.StatusCode() == http.StatusNotModified {
+			break
+		}
 	}
 
 	c.Messages = messages

@@ -1,6 +1,8 @@
 package groupme
 
-import "time"
+import (
+	"time"
+)
 
 type Message struct {
 	ID          string       `json:"id,omitempty"`
@@ -22,12 +24,13 @@ func (m Message) SentDuringTimespan(begin, end time.Time) bool {
 }
 
 func (m Message) SentBefore(day time.Time) bool {
-	return m.CreatedAt < day.Unix()
-
+	isBefore := m.CreatedAt < day.Unix()
+	return isBefore
 }
 
 func (m Message) SentAfter(day time.Time) bool {
-	return m.CreatedAt >= day.Unix()
+	isAfter := m.CreatedAt >= day.Unix()
+	return isAfter
 }
 
 func (m Message) NumFavorites() int {

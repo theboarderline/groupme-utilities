@@ -14,12 +14,11 @@ var _ = Describe("Filter", func() {
 	)
 
 	BeforeEach(func() {
-		todayBegin = time.Date(2023, 6, 14, 0, 0, 0, 0, time.UTC)
+		todayBegin = time.Date(2023, 11, 5, 0, 0, 0, 0, time.UTC)
 		todayEnd = time.Date(todayBegin.Year(), todayBegin.Month(), todayBegin.Day(), 23, 59, 59, 0, time.UTC)
 	})
 
 	It("can filter messages and return only the Memes on a given day", func() {
-		yesterday := time.Date(2023, 6, 12, 0, 0, 0, 0, time.UTC)
 		rawMessages := []groupme.Message{
 			{
 				Attachments: []groupme.Attachment{{Type: "image"}},
@@ -34,14 +33,38 @@ var _ = Describe("Filter", func() {
 				CreatedAt:   todayBegin.Unix(),
 			},
 			{
-				Attachments: []groupme.Attachment{{Type: "image"}},
-				CreatedAt:   yesterday.Unix(),
+				Attachments: []groupme.Attachment{{Type: "yesterdays image"}},
+				CreatedAt:   todayBegin.AddDate(0, 0, 1).Unix(),
 			},
 		}
 
 		filteredMessages := groupme.FilterMemesByTimespan(rawMessages, todayBegin, todayEnd)
 
 		Expect(len(filteredMessages)).To(BeEquivalentTo(2))
+	})
+
+	It("can determine if a meme was sent after a given point in time", func() {
+		message := groupme.Message{
+			CreatedAt: todayBegin.Add(1 * time.Hour).Unix(),
+		}
+		Expect(message.SentAfter(todayBegin)).To(BeTrue())
+
+		message = groupme.Message{
+			CreatedAt: todayBegin.Add(-1 * time.Hour).Unix(),
+		}
+		Expect(message.SentAfter(todayBegin)).To(BeFalse())
+	})
+
+	It("can determine if a meme was sent before a given point in time", func() {
+		message := groupme.Message{
+			CreatedAt: todayBegin.Add(1 * time.Hour).Unix(),
+		}
+		Expect(message.SentBefore(todayBegin)).To(BeFalse())
+
+		message = groupme.Message{
+			CreatedAt: todayBegin.Add(-1 * time.Hour).Unix(),
+		}
+		Expect(message.SentBefore(todayBegin)).To(BeTrue())
 	})
 
 	It("can determine if a message is a meme", func() {

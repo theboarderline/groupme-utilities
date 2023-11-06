@@ -19,8 +19,8 @@ var _ = Describe("Groupme", func() {
 
 	BeforeEach(func() {
 		validClient = groupme.NewBotClient(os.Getenv("BOT_ID"), os.Getenv("GROUP_ID"), os.Getenv("GROUPME_ACCESS_TOKEN"))
-		testDay = time.Date(2023, 6, 14, 0, 0, 0, 0, time.UTC)
-		testDayEnd = time.Date(testDay.Year(), testDay.Month(), testDay.Day(), 23, 59, 59, 0, time.UTC)
+		testDay = time.Date(2023, 11, 5, 0, 0, 0, 0, time.Local)
+		testDayEnd = time.Date(testDay.Year(), testDay.Month(), 6, 0, 0, 0, 0, time.Local)
 		dayWithNoMemes = time.Date(2023, 6, 25, 0, 0, 0, 0, time.UTC)
 	})
 
@@ -63,21 +63,9 @@ var _ = Describe("Groupme", func() {
 	})
 
 	It("can get the Memes from the groupme api and return the top meme", func() {
-		testDayEnd = testDay.AddDate(0, 0, 1)
 		meme, err := validClient.GetTopMemeBetweenDates(&testDay, &testDayEnd)
 
-		expectedMessageID := "168675296063513419"
-		Expect(err).NotTo(HaveOccurred())
-		Expect(meme).NotTo(BeNil())
-		Expect(meme.ID).To(BeEquivalentTo(expectedMessageID))
-		ExpectAllMessagesToBeOnDay([]groupme.Message{meme}, testDay)
-	})
-
-	It("can get the Memes from the groupme api and return the top meme", func() {
-		testDayEnd = testDay.AddDate(0, 0, 1)
-		meme, err := validClient.GetTopMemeBetweenDates(&testDay, &testDayEnd)
-
-		expectedMessageID := "168675296063513419"
+		expectedMessageID := "169923063376006591"
 		Expect(err).NotTo(HaveOccurred())
 		Expect(meme).NotTo(BeNil())
 		Expect(meme.ID).To(BeEquivalentTo(expectedMessageID))
@@ -85,7 +73,6 @@ var _ = Describe("Groupme", func() {
 	})
 
 	It("can get safely return no memes if none were sent that day", func() {
-		dayWithNoMemes = dayWithNoMemes.AddDate(0, 0, 1)
 		meme, err := validClient.GetTopMemeBetweenDates(&dayWithNoMemes, &dayWithNoMemes)
 
 		Expect(err).NotTo(HaveOccurred())
